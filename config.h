@@ -23,7 +23,7 @@
 #define TAPPING_TERM 200
 #define PERMISSIVE_HOLD
 #define IGNORE_MOD_TAP_INTERRUPT // removed this as i kept getting modified keys
-#define TAPPING_TOGGLE 2 // for the TT() function
+#define TAPPING_TOGGLE 2         // for the TT() function
 
 // Recommended for heavy chording.
 // #define QMK_KEYS_PER_SCAN 4

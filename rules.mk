@@ -13,10 +13,12 @@ AUDIO_ENABLE = no           # Audio output
 RGBLIGHT_ENABLE = no       # Enable WS2812 RGB underlight.
 SWAP_HANDS_ENABLE = no      # Enable one-hand typing
 
-OLED_DRIVER_ENABLE = yes   # Enables the use of OLED displays
 BOOTMAGIC_ENABLE = no    # Bootmagic lite (only reset)
 AUTO_SHIFT_ENABLE = no
 
+OLED_DRIVER_ENABLE = yes   # Enables the use of OLED displays
+COMBO_ENABLE = yes
+ 
 EXTRAFLAGS += -flto
 KEY_OVERRIDE_ENABLE = yes
 
