@@ -24,3 +24,4 @@ KEY_OVERRIDE_ENABLE = yes
 
 
 SRC += lib/logo_reader.c
+VPATH  +=  keyboards/gboards/ 		# http://combos.gboards.ca/docs/install/

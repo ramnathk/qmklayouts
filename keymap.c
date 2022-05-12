@@ -18,26 +18,22 @@
 
 #include "keymap.h"
 #include "string.h"
+#include "g/keymap_combo.h"  // refer: http://combos.gboards.ca/docs/install/
 
 #include <stdio.h>
 
 #ifdef AUTO_SHIFT_ENABLE
-  #include "process_auto_shift.h"
+#    include "process_auto_shift.h"
 #endif
 
-
-
-enum layers {
-    _QWERT = 0,
-    _HNDD,
-    _HNDD_NUM,
-    _SYML,
-    _FUNL
+enum layers { _QWERT = 0,
+   _HNDD,
+   _HNDD_NUM,
+   _SYML,
+   _FUNL
 };
 
-#define COMBO_ONLY_FROM_LAYER _QWERT // all combos based on QWERTY layer keys only
 
-#include "combos.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -53,7 +49,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  //`---------------------+------------+-----------+------------+------+--------|   |--------+--------+--------+--------+---------------------------'
                                _______,  _______, NUM_SPC, KC_TAB,                   SYM_ENT, NUM_SPC, SYM_BSC, FUN_DEL \
                             //`------------------------------------'               `------------------------------------'
-    ), 
+    ),
 
 
 // this is based on the handsdown Titanium layout
@@ -70,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  //`--------+-------------+-------------+-------------+-------------+--------+--------|  |-------+--------+-------------+-------------+-------------+-------------+--------|
                                                   KC_Z,         KC_Q, NUM_KCR,  KC_SPC,   SYM_ENT, NUM_SPC,      SYM_BSC, FUN_DEL \
     ),
-   
+
    [_HNDD_NUM] = LAYOUT(
  //,------------------------------------------------------.                    ,-----------------------------------------------------.
      mBootLoad,  QWERT,    HNDD, _______, KC_CAPS, KC_ASTG,                      _______, _______, _______, _______, _______, _______,\
@@ -119,15 +115,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 // 20 fps
-#define FRAME_TIMEOUT (1000/20)
+#define FRAME_TIMEOUT (1000 / 20)
 // static uint16_t anim_timer = 0;
-
-
-
 
 // bool get_tapping_force_hold(uint16_t keycode, keyrecord_t *record) {
 //     switch (keycode) {
-// // only the NUM_BSC mod key allows for tapping force hold 
+// // only the NUM_BSC mod key allows for tapping force hold
 //         case NUM_BSC:
 //             return false;
 //         default:
@@ -140,19 +133,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const char *read_logo(void);
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-  if (!is_keyboard_master())
-    return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
-  return OLED_ROTATION_270;
+    if (!is_keyboard_master()) return OLED_ROTATION_180; // flips the display 180 degrees if offhand
+    return OLED_ROTATION_270;
 }
 
-
-//Setup some mask which can be or'd with bytes to turn off pixels
+// Setup some mask which can be or'd with bytes to turn off pixels
 const uint8_t single_bit_masks[8] = {127, 191, 223, 239, 247, 251, 253, 254};
 
 static void fade_display(void) {
-    //Define the reader structure
+    // Define the reader structure
     oled_buffer_reader_t reader;
-    uint8_t buff_char;
+    uint8_t              buff_char;
     if (random() % 30 == 0) {
         srand(timer_read());
         // Fetch a pointer for the buffer byte at index 0. The return structure
@@ -160,68 +151,66 @@ static void fade_display(void) {
         // index position if we want to perform a sequential read by
         // incrementing the buffer pointer
         reader = oled_read_raw(0);
-        //Loop over the remaining buffer and erase pixels as we go
+        // Loop over the remaining buffer and erase pixels as we go
         for (uint16_t i = 0; i < reader.remaining_element_count; i++) {
-            //Get the actual byte in the buffer by dereferencing the pointer
+            // Get the actual byte in the buffer by dereferencing the pointer
             buff_char = *reader.current_element;
             if (buff_char != 0) {
                 oled_write_raw_byte(buff_char & single_bit_masks[rand() % 8], i);
             }
-            //increment the pointer to fetch a new byte during the next loop
+            // increment the pointer to fetch a new byte during the next loop
             reader.current_element++;
         }
     }
 }
 
-#define IDLE_FRAMES 5
-#define IDLE_SPEED 20
-#define TAP_FRAMES 2
-#define TAP_SPEED 20
-#define ANIM_FRAME_DURATION 200
-#define ANIM_SIZE 512
+#    define IDLE_FRAMES 5
+#    define IDLE_SPEED 20
+#    define TAP_FRAMES 2
+#    define TAP_SPEED 20
+#    define ANIM_FRAME_DURATION 200
+#    define ANIM_SIZE 512
 
-uint32_t anim_timer = 0;
-uint32_t anim_sleep = 0;
-uint8_t current_idle_frame = 0;
-uint8_t current_tap_frame = 0;
-char wpm_str[6];
-
-
+uint32_t anim_timer         = 0;
+uint32_t anim_sleep         = 0;
+uint8_t  current_idle_frame = 0;
+uint8_t  current_tap_frame  = 0;
+char     wpm_str[6];
 
 static void render_status(void) {
-#ifdef AUTO_SHIFT_ENABLE
+#    ifdef AUTO_SHIFT_ENABLE
     // Auto shift state
     switch (get_autoshift_state()) {
         case true:
-        oled_write_P(PSTR("Shift\n"), false);
-        break;
+            oled_write_P(PSTR("Shift\n"), false);
+            break;
         default:
-        oled_write_P(PSTR("Nosh\n"), false);
+            oled_write_P(PSTR("Nosh\n"), false);
     }
-#else
+#    else
     oled_write_P(PSTR("NO SH\n"), false);
-#endif
+#    endif
     // Host Keyboard Layer Status
     oled_write_P(PSTR("\n-----\n"), false);
     switch (get_highest_layer(default_layer_state)) {
         case _QWERT:
-         oled_write_P(PSTR("Qwert\n"), false);
-        break;
+            oled_write_P(PSTR("Qwert\n"), false);
+            break;
         case _HNDD:
-         oled_write_P(PSTR("HDTi\n"), false);
+            oled_write_P(PSTR("HDTi\n"), false);
         default:
-         oled_write_P(PSTR("Undefined\n"), false);
+            oled_write_P(PSTR("Undefined\n"), false);
     }
     oled_write_P(PSTR("\n-----\n"), false);
     switch (get_highest_layer(layer_state)) {
         case _HNDD_NUM:
-        oled_write_P(PSTR("Num\n"), false);
-        break;
+            oled_write_P(PSTR("Num\n"), false);
+            break;
         case _SYML:
-        oled_write_P(PSTR("Sym\n"), false);
-        break;
+            oled_write_P(PSTR("Sym\n"), false);
+            break;
         case _FUNL:
-        oled_write_P(PSTR("Fn\n"), false);
+            oled_write_P(PSTR("Fn\n"), false);
     }
 
     // Host Keyboard LED Status
@@ -248,8 +237,6 @@ bool oled_task_user(void) {
     return false;
 }
 
-
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         oled_clear();
@@ -260,8 +247,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 break;
 
             case mDblCtrl:
-            // when keycode QMKBEST is pressed
-            //SEND_STRING("QMK is the best thing ever!");
+                // when keycode QMKBEST is pressed
+                // SEND_STRING("QMK is the best thing ever!");
                 SEND_STRING(SS_TAP(X_LCTL) SS_TAP(X_LCTL));
                 break;
 
@@ -273,6 +260,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 };
 
-
-
 #endif // for OLED Driver Enable
+
+bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
+    /* Disable combo `SOME_COMBO` on layer `_LAYER_A` */
+    if (combo_index == JG_Z || combo_index == PV_Q) {
+        return (layer_state_is(_HNDD));
+    }
+
+    return true;
+}
