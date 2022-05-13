@@ -48,6 +48,8 @@
 #define kCUT LCMD(KC_X)
 #define kCOPY LCMD(KC_C)
 #define kPSTE LCMD(KC_V)
+#define kCmdW LCMD(KC_W)
+#define kCmdQ LCMD(KC_Q)
 
 enum kSplKeys {
     mBOSSKY = SAFE_RANGE,
