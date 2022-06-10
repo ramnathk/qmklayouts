@@ -20,22 +20,19 @@
 
 // HNDD exclusive 
 
-// #define NAV_KCL  LT(_HNDD_NUM, KC_L)
-#define NUM_LPRN LT(_HNDD_NUM, KC_LPRN)
-#define NUM_RPRN LT(_HNDD_NUM, KC_RPRN)
-#define NUM_KCR LT(_HNDD_NUM, KC_R)
-#define NUM_SPC LT(_HNDD_NUM, KC_SPC)
-#define NUM_BSC LT(_HNDD_NUM, KC_BSPC)
+// #define NAV_KCL  LT(_NUM, KC_L)
+#define NUM_LPRN LT(_NUM, KC_LPRN)
+#define NUM_RPRN LT(_NUM, KC_RPRN)
+#define NUM_KCR LT(_NUM, KC_R)
+#define NUM_SPC LT(_NUM, KC_SPC)
+#define SYM_SPC LT(_SYML, KC_SPC)
 #define FUN_DEL LT(_FUNL, KC_DEL)
-#define SYM_BSC LT(_SYML, KC_BSPC)
+#define SYM_TAB LT(_SYML, KC_TAB)
 
 
 // end HND exclusives
 
-#define NAV_SPC LT(_HNDD_NUM, KC_SPC)
-#define NAV_BSC LT(_HNDD_NUM, KC_BSPC)
 #define SYM_ENT LT(_SYML, KC_ENT)
-#define FN_DEL LT(_FUNL, KC_DEL)
 
 #define HNDD DF(_HNDD)
 #define QWERT DF(_QWERT)

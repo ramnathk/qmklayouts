@@ -22,13 +22,10 @@
 
 #include <stdio.h>
 
-#ifdef AUTO_SHIFT_ENABLE
-#    include "process_auto_shift.h"
-#endif
 
 enum layers { _QWERT = 0,
    _HNDD,
-   _HNDD_NUM,
+   _NUM,
    _SYML,
    _FUNL
 };
@@ -47,7 +44,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  //|--------+------------+------------+------------+------------+------+--------.   ,-------+--------+--------+--------+--------+---------+--------|
  kCmdCtrlSft,        KC_Z,        KC_X,        KC_C,        KC_V,  KC_B,  KC_TAB,    FUN_DEL,    KC_N,    KC_M, KC_COMM,  KC_DOT,  KC_SLSH, _______,\
  //`---------------------+------------+-----------+------------+------+--------|   |--------+--------+--------+--------+---------------------------'
-                               _______,  _______, NUM_SPC, KC_TAB,                   SYM_ENT, NUM_SPC, SYM_BSC, FUN_DEL \
+                                           MO(_FUNL),  _______, NUM_SPC, SYM_TAB,   SYM_ENT, NUM_SPC, KC_BSPC, FUN_DEL \
                             //`------------------------------------'               `------------------------------------'
     ),
 
@@ -64,10 +61,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  //|--------+-------------+-------------+-------------+-------------+-----------------|  |-------+--------+-------------+-------------+-------------+-------------+--------|
      _______,         KC_X,         KC_F,         KC_L,         KC_D,    KC_B, _______,   _______, KC_MINS,         KC_U,         KC_O,         KC_Y,         KC_K, _______,\
  //`--------+-------------+-------------+-------------+-------------+--------+--------|  |-------+--------+-------------+-------------+-------------+-------------+--------|
-                                                  KC_Z,         KC_Q, NUM_KCR,  KC_SPC,   SYM_ENT, NUM_SPC,      SYM_BSC, FUN_DEL \
+                                               _______,       KC_TAB, NUM_KCR, SYM_SPC,   SYM_ENT, NUM_SPC,      KC_BSPC, _______ \
     ),
 
-   [_HNDD_NUM] = LAYOUT(
+  [_NUM] = LAYOUT(
  //,------------------------------------------------------.                    ,-----------------------------------------------------.
      mBootLoad,  QWERT,    HNDD, _______, KC_CAPS, KC_ASTG,                      _______, _______, _______, _______, _______, _______,\
  //|--------+---------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -75,7 +72,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  //|--------+---------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
      _______,  KC_SCLN,    KC_4,    KC_5,    KC_6,  KC_EQL,                       KC_EQL, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, _______,\
  //|--------+---------+--------+--------+--------+--------+--------.  ,--------+--------+--------+--------+--------+--------+--------|
-     _______,   KC_GRV,    KC_1,    KC_2,    KC_3, KC_BSLS, _______,    _______, KC_UNDS, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, _______,\
+      KC_DOT,   KC_GRV,    KC_1,    KC_2,    KC_3, KC_BSLS, _______,    _______, KC_UNDS, KC_HOME, KC_PGDN, KC_PGUP,  KC_END, _______,\
  //`----------------------+--------+--------+--------+-------------|  |--------+--------+--------+--------+--------+-----------------'
                                  _______,  KC_DOT,    KC_0, KC_MINS,    _______, KC_SPC,  KC_LT, KC_GT \
                         //`----------------------------------------'  `------------------------------------'
@@ -178,18 +175,6 @@ uint8_t  current_tap_frame  = 0;
 char     wpm_str[6];
 
 static void render_status(void) {
-#    ifdef AUTO_SHIFT_ENABLE
-    // Auto shift state
-    switch (get_autoshift_state()) {
-        case true:
-            oled_write_P(PSTR("Shift\n"), false);
-            break;
-        default:
-            oled_write_P(PSTR("Nosh\n"), false);
-    }
-#    else
-    oled_write_P(PSTR("NO SH\n"), false);
-#    endif
     // Host Keyboard Layer Status
     oled_write_P(PSTR("\n-----\n"), false);
     switch (get_highest_layer(default_layer_state)) {
@@ -203,7 +188,7 @@ static void render_status(void) {
     }
     oled_write_P(PSTR("\n-----\n"), false);
     switch (get_highest_layer(layer_state)) {
-        case _HNDD_NUM:
+        case _NUM:
             oled_write_P(PSTR("Num\n"), false);
             break;
         case _SYML:
@@ -264,7 +249,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
     /* Disable combo `SOME_COMBO` on layer `_LAYER_A` */
-    if (combo_index == JG_Z || combo_index == PV_Q) {
+    if (combo_index == XF_Z || combo_index == LD_Q) {
         return (layer_state_is(_HNDD));
     }
 

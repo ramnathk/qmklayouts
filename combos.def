@@ -8,9 +8,9 @@ COMB(IOP_ALTDEL,     A(KC_DEL),          KC_I, KC_O, KC_P)
 
 
 // HD layer combos
-COMB(JG_Z,           KC_Z,               KC_J, KC_G)
-COMB(PV_Q,           KC_Q,               KC_P, KC_V)
-COMB(HD_BKSPC,       KC_BSPC,            KC_DOT, KC_SLSH)
-COMB(HD_DEL,         KC_DEL,             KC_SLSH, KC_DQT)
-COMB(HD_ALTBKSPC,   A(KC_BSPC),         KC_DOT, KC_SLSH, KC_DQT)
-COMB(HD_ALTDEL,     A(KC_DEL),          KC_SLSH, KC_DQT, KC_QUOT)
+COMB(XF_Z,           KC_Z,               KC_X, KC_F)
+COMB(LD_Q,           KC_Q,               KC_L, KC_D)
+COMB(HD_BKSPC,       KC_BSPC,            KC_U, KC_O)
+COMB(HD_DEL,         KC_DEL,             KC_O, KC_Y)
+COMB(HD_ALTBKSPC,   A(KC_BSPC),         KC_U, KC_O, KC_Y)
+COMB(HD_ALTDEL,     A(KC_DEL),          KC_O, KC_Y, KC_K)
